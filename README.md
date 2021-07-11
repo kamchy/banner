@@ -21,9 +21,9 @@ Result is always saved to out.png in current working directory.
 ### Default 800x600 image:
 `./palette`:
 
-![default](/img/default.png)
+![default](img/default.png)
 
 ### Banner 400x300 with text and subtext
 `./palette -width 400 -height 300 -text "Go programming" -subtext "A way to become enlightened"`
 
-![small quote](/img/small.png)
+![small quote](img/small.png)
