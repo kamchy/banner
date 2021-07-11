@@ -1,4 +1,4 @@
-module kamilachyla.com/go/words
+module github.com/kamchy/banner
 
 go 1.16
 
