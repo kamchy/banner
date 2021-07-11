@@ -4,6 +4,7 @@ import (
 	"flag"
 	"image/color"
 	"math/rand"
+	"time"
 
 	"github.com/fogleman/gg"
 	"github.com/lucasb-eyer/go-colorful"
@@ -94,12 +95,12 @@ func getInput() (Size, Texts) {
 
 func sizeToFontSize(size Size) []float64 {
 	fontsizePrimary := float64(size.wi) / 15
-	fontsizeSecondary := fontsizePrimary * 0.5
+	fontsizeSecondary := fontsizePrimary * 0.6
 	return []float64{fontsizePrimary, fontsizeSecondary}
 }
 
 func main() {
-	rand.Seed(2)
+	rand.Seed(time.Now().UnixNano())
 	size, texts := getInput()
 	draw(size, drawBgRect, texts).SavePNG("out.png")
 }
