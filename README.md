@@ -3,7 +3,7 @@ Generates a banner of given sizes with main and support text as .png.
 Usage:
 ```bash
 
-Usage of palette:
+Usage of banner:
   -height int
     	height of the resulting image (default 600)
   -subtext string
@@ -19,11 +19,11 @@ Result is always saved to out.png in current working directory.
 ## Example:
 
 ### Default 800x600 image:
-`./palette`:
+`./banner`:
 
 ![default](img/default.png)
 
 ### Banner 400x300 with text and subtext
-`./palette -width 400 -height 300 -text "Go programming" -subtext "A way to become enlightened"`
+`./banner -width 400 -height 300 -text "Go programming" -subtext "A way to become enlightened"`
 
 ![small quote](img/small.png)
