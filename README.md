@@ -2,14 +2,22 @@ Generates a banner of given sizes with main and support text as .png.
 
 Usage:
 ```bash
-
-Usage of banner:
+Usage of ./banner:
+  -alg int
+    	Background painter algorithm; valid values are: 
+    	0 -> random rectangles
+    	1 -> plain color
+    	2 -> random concentric circles
+    	3 -> random horizontal lines
+    	 (default 1)
   -height int
     	height of the resulting image (default 600)
   -subtext string
     	explanatory text to display in the image below the text (default "this time about really important things")
   -text string
     	text to display in the image (default "My blogpost")
+  -ts float
+    	size of tile (default 15)
   -width int
     	width of the resulting image (default 800)
 ```

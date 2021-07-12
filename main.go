@@ -51,6 +51,17 @@ func DrawBgLines(size Size, dc *gg.Context, palette []colorful.Color) {
 		y += linew * 2.0
 	}
 }
+
+// Single tile painter: draws concentric circles
+func DrawBgHexagons(size Size, dc *gg.Context, palette []colorful.Color) {
+	DrawRect(size, dc, colorful.Hsl(33.0, 0.2, 0.7))
+	s := math.Min(size.wi, size.hi)
+	dc.SetColor(randFrom(palette[1:]))
+	dc.DrawRegularPolygon(6, s/2, s/2, s/2, 30.0*2*math.Pi/360.0)
+	dc.Fill()
+}
+
+// Single tile painter: draws concentric circles
 func DrawBgCircles(size Size, dc *gg.Context, palette []colorful.Color) {
 	DrawRect(size, dc, colorful.FastLinearRgb(1, 1, 1))
 	for _, rmul := range []float64{0.8, 0.6, 0.4, 0.2} {
@@ -59,18 +70,23 @@ func DrawBgCircles(size Size, dc *gg.Context, palette []colorful.Color) {
 		dc.Fill()
 	}
 }
+
+// Draws rect of size with first color of the palette
 func DrawBgPlain(size Size, dc *gg.Context, palette []colorful.Color) {
 	DrawRect(size, dc, palette[0])
 }
 
+// Draws rect of size with randomly picked color from the palette
 func DrawBgRandomRectColor(size Size, dc *gg.Context, palette []colorful.Color) {
 	DrawRect(size, dc, randFrom(palette))
 }
 
+// Generates random colorful.Color from given array
 func randFrom(p []colorful.Color) colorful.Color {
 	return p[rand.Intn(len(p))]
 }
 
+// Draws all tiles using tilePainter for single tile
 func DrawBgRectWithPainter(size Size, dc *gg.Context, palette []colorful.Color, tilePainter Painter) {
 	wi, hi := size.wi, size.hi
 	tile := tilePainter.tilesize
@@ -164,6 +180,7 @@ var painterAlgs = []Alg{
 	{DrawBgPlain, "plain color", false},
 	{DrawBgCircles, "random concentric circles", true},
 	{DrawBgLines, "random horizontal lines", false},
+	{DrawBgHexagons, "random hexagons", true},
 }
 
 func descriptions(algs []Alg) string {
@@ -179,14 +196,16 @@ func descriptions(algs []Alg) string {
 // height - height of resulting image
 // Texts - primary and secondary
 // function of type BgFn that can draw on given size, using given context and palette
-func GetInput(painterAlgs []Alg) (int, int, Texts, BgFn) {
+// name of .png output file
+func GetInput(painterAlgs []Alg) (int, int, Texts, BgFn, string) {
 
 	const DEF_WIDTH = 800
 	const DEF_HEIGHT = 600
 	const DEF_TITLE = "My blogpost"
 	const DEF_SUB = "this time about really important things"
-	const DEF_TILE = 15
-	const DEF_ALG = 1
+	const DEF_TILE = 30
+	const DEF_ALG = 4
+	const DEF_OUT = "out.png"
 
 	var makeBgFn = func(pindex *int, tilesize *float64, widthP *int) BgFn {
 		if *pindex < 0 || *pindex > len(painterAlgs) {
@@ -209,8 +228,9 @@ func GetInput(painterAlgs []Alg) (int, int, Texts, BgFn) {
 	subtextP := flag.String("subtext", DEF_SUB, "explanatory text to display in the image below the text")
 	painterP := flag.Int("alg", DEF_ALG, fmt.Sprintf("Background painter algorithm; valid values are: %v", descriptions(painterAlgs)))
 	tileSizeP := flag.Float64("ts", DEF_TILE, "size of tile")
+	outNameP := flag.String("outName", DEF_OUT, "name of output file where banner in .png format will be saved")
 	flag.Parse()
-	return *widthP, *heightP, Texts{*textP, *subtextP}, makeBgFn(painterP, tileSizeP, widthP)
+	return *widthP, *heightP, Texts{*textP, *subtextP}, makeBgFn(painterP, tileSizeP, widthP), *outNameP
 }
 
 // Takes size of whole canvas and determines size of font
@@ -222,6 +242,6 @@ func sizeToFontSize(size Size) []float64 {
 }
 
 func main() {
-	w, h, texts, bgFn := GetInput(painterAlgs)
-	Draw(w, h, texts, bgFn).SavePNG("out.png")
+	w, h, texts, bgFn, outName := GetInput(painterAlgs)
+	Draw(w, h, texts, bgFn).SavePNG(outName)
 }
