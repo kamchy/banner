@@ -1,4 +1,4 @@
-package main
+package banner
 
 import (
 	"flag"
@@ -80,7 +80,7 @@ func InputFlagSet() (*flag.FlagSet, Input) {
 // Texts - primary and secondary
 // name of .png output file
 // TODO - sanitize input
-func GetInput(painterAlgs []Alg) Input {
+func GetInput() Input {
 	fs, inp := InputFlagSet()
 	fs.Parse(os.Args)
 	return inp

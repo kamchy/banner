@@ -1,4 +1,4 @@
-package main
+package banner
 
 import "github.com/lucasb-eyer/go-colorful"
 

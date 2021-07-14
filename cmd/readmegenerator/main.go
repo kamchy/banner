@@ -4,6 +4,8 @@ package main
 import (
 	"bytes"
 	"html/template"
+
+	ba "github.com/kamchy/banner"
 )
 
 type Repo struct {
@@ -52,22 +54,9 @@ And here are images:
 }
 
 func generateHelpMessage() string {
-	return "Sample usage"
+	ifs, _ := ba.InputFlagSet()
+	var b bytes.Buffer
+	ifs.SetOutput(&b)
+	ifs.Usage()
+	return b.String()
 }
-
-//func generateHelpMessage() string {
-//ifs, _ := InputFlagSet()
-//var b bytes.Buffer
-//ifs.SetOutput(&b)
-//ifs.Usage()
-//return b.String()
-//}
-//func main() {
-//if err != nil {
-//panic(err)
-//}
-//err = tmpl.Execute(os.Stdout, sweaters)
-//if err != nil {
-//panic(err)
-//}
-//}
