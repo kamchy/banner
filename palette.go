@@ -1,59 +1,65 @@
 package banner
 
-import "github.com/lucasb-eyer/go-colorful"
+import (
+	"fmt"
+	"math/rand"
 
-type Palette = []colorful.Color
-type PaletteType int
-
-func fromIntToPaletteType(v int) PaletteType {
-	switch v {
-	case 0:
-		return Warm
-	case 1:
-		return Happy
-	default:
-		return Unknown
-	}
-}
-
-const (
-	Warm PaletteType = iota
-	Happy
-	Unknown
+	"github.com/lucasb-eyer/go-colorful"
 )
 
-var paletteGenerators []PaletteType = []PaletteType{Warm, Happy}
+type Palette = []colorful.Color
+type PaletteType = int
 
-type PaletteGenerator interface {
-	Generate(int) Palette
-}
+const (
+	Warm    PaletteType = iota
+	Happy   PaletteType = iota
+	Unknown PaletteType = iota
+)
 
-func (t PaletteType) Generate(n int) Palette {
-	var p func(int) (Palette, error)
+func DefaultPalette(t int, n int) Palette {
+	var single = func() colorful.Color {
+		return colorful.Hsl(float64(rand.Intn(360)), 0.5, 0.5)
+	}
 	switch t {
 	case Warm:
-		p = colorful.WarmPalette
+		single = colorful.WarmColor
 	case Happy:
-		p = colorful.HappyPalette
+		single = colorful.HappyColor
 	}
-	ret, err := p(n)
+	res := make([]colorful.Color, 3, 3)
+	for idx, _ := range res {
+		res[idx] = single()
+	}
+	return res
+}
+
+type PaletteGenerator = func(int) (Palette, error)
+type PaletteInfo struct {
+	Generator PaletteGenerator
+	Desc      string
+}
+
+func descriptionsPI(vals map[PaletteType]PaletteInfo) string {
+	var s = "\n"
+	for key, val := range vals {
+		s += fmt.Sprintf("%d -> %s\n", key, val.Desc)
+	}
+	return s
+}
+
+var PaletteInfos = map[PaletteType]PaletteInfo{
+	Warm:  PaletteInfo{colorful.WarmPalette, "Warm"},
+	Happy: PaletteInfo{colorful.HappyPalette, "Happy"}}
+
+func GenPaletteOf(t PaletteType, n int) Palette {
+	info, is := PaletteInfos[t]
+	if !is {
+		return DefaultPalette(t, n)
+	}
+	pal, err := info.Generator(n)
 	if err != nil {
-		ret = []colorful.Color{colorful.WarmColor(), colorful.WarmColor()}
+		return DefaultPalette(t, n)
 	}
-	return ret
-}
+	return pal
 
-func (t PaletteType) Desc() string {
-	switch t {
-	case Warm:
-		return "Warm"
-	case Happy:
-		return "Happy"
-	default:
-		return "Unknown"
-	}
-}
-
-func GenPaletteOf(t PaletteGenerator, n int) Palette {
-	return t.Generate(n)
 }

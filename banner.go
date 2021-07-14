@@ -1,6 +1,7 @@
 package banner
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/fogleman/gg"
@@ -66,16 +67,37 @@ func generatingFn(alg Alg, tilesize float64) BgFn {
 	}
 }
 
+type AlgType = int
+
+const (
+	RandomRect AlgType = iota
+	RandomRectOffset
+	PlainColor
+	ConcentricCircles
+	ConcentricCirclesOffset
+	HorizontalLines
+	RandomHexagons
+	RandomHexagonsOffset
+)
+
+func descriptionsPA(vals map[AlgType]Alg) string {
+	var s = "\n"
+	for key, val := range vals {
+		s += fmt.Sprintf("%d -> %s\n", key, val.Desc())
+	}
+	return s
+}
+
 // array of identifiers presented to the user to Alg struct
-var painterAlgs = []Alg{
-	{DrawRectRand, "random rectangles", gridGenerator},
-	{DrawRectRand, "random rectangles with offset", gridDeltaGenerator},
-	{DrawRect, "plain color", plainGenerator},
-	{DrawBgCircles, "concentric circles", gridGenerator},
-	{DrawBgCircles, "concentric circles offset", gridDeltaGenerator},
-	{DrawBgLines, "random horizontal lines", linesRandomGenerator},
-	{DrawHexagon, "random hexagons", gridGenerator},
-	{DrawHexagon, "random hexagons with offset", gridDeltaGenerator},
+var PainterAlgs = map[AlgType]Alg{
+	RandomRect:              {DrawRectRand, "random rectangles", gridGenerator},
+	RandomRectOffset:        {DrawRectRand, "random rectangles with offset", gridDeltaGenerator},
+	PlainColor:              {DrawRect, "plain color", plainGenerator},
+	ConcentricCircles:       {DrawBgCircles, "concentric circles", gridGenerator},
+	ConcentricCirclesOffset: {DrawBgCircles, "concentric circles offset", gridDeltaGenerator},
+	HorizontalLines:         {DrawBgLines, "random horizontal lines", linesRandomGenerator},
+	RandomHexagons:          {DrawHexagon, "random hexagons", gridGenerator},
+	RandomHexagonsOffset:    {DrawHexagon, "random hexagons with offset", gridDeltaGenerator},
 }
 
 // Draws with pc as PatternContext, filling background with patternDraw and using Textx.
@@ -85,13 +107,13 @@ func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
 }
 
 func GenerateBanner(i Input) {
-	wi, hi, palette, algIdx, tileSize, outName, texts :=
-		*i.w, *i.h, fromIntToPaletteType(*i.pt), *i.algIdx, *i.tileSize, *i.outName, Texts{*i.texts[0], *i.texts[1]}
+	wi, hi, paletteType, algType, tileSize, outName, texts :=
+		*i.W, *i.W, *i.Pt, *i.AlgIdx, *i.TileSize, *i.OutName, Texts{*i.Texts[0], *i.Texts[1]}
 
 	drawContext := gg.NewContext(wi, hi)
 	var canvasSize = Size{float64(wi), float64(hi)}
-	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(palette, 10)}
-	Draw(cc, texts, generatingFn(painterAlgs[algIdx], tileSize))
+	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(paletteType, 10)}
+	Draw(cc, texts, generatingFn(PainterAlgs[algType], tileSize))
 	cc.dc.SavePNG(outName)
 
 }
