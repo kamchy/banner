@@ -23,6 +23,9 @@ func textStripeBlended(base colorful.Color) (float64, float64, float64) {
 
 // FIXME - text layout
 func textDraw(c PatternContext, texts Texts) {
+	if len(texts) == 0 {
+		return
+	}
 	size, dc, pal := c.size, c.dc, c.p
 	w, h := float64(size.wi), float64(size.hi)
 	bannerHeight := h / 3

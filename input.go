@@ -3,7 +3,17 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 )
+
+const DEF_WIDTH = 800
+const DEF_HEIGHT = 600
+const DEF_TITLE = "My blogpost"
+const DEF_SUB = "this time about really important things"
+const DEF_TILE = 30
+const DEF_ALG = 5
+const DEF_OUT = "out.png"
+const DEF_PAL = Warm
 
 type DescProvider interface {
 	Desc() string
@@ -40,13 +50,28 @@ func makeInterfacePaletteType(aa []PaletteType) []DescProvider {
 }
 
 type Input struct {
-	w        int
-	h        int
-	texts    Texts
-	algIdx   int
-	tileSize float64
-	pt       PaletteType
-	outName  string
+	w        *int
+	h        *int
+	texts    []*string
+	algIdx   *int
+	tileSize *float64
+	pt       *int
+	outName  *string
+}
+
+func InputFlagSet() (*flag.FlagSet, Input) {
+	fs := flag.NewFlagSet("input", flag.ContinueOnError)
+
+	widthP := fs.Int("width", DEF_WIDTH, "width of the resulting image")
+	heightP := fs.Int("height", DEF_HEIGHT, "height of the resulting image")
+	textP := fs.String("text", DEF_TITLE, "text to display in the image")
+	subtextP := fs.String("subtext", DEF_SUB, "explanatory text to display in the image below the text")
+	painterP := fs.Int("alg", DEF_ALG, fmt.Sprintf("Background painter algorithm; valid values are: %v", descriptions(makeInterfaceAlg(painterAlgs))))
+	tileSizeP := fs.Float64("ts", DEF_TILE, "size of tile")
+	outPalP := fs.Int("palette", int(DEF_PAL), fmt.Sprintf("palette type; valid values are: %v", descriptions(makeInterfacePaletteType(paletteGenerators))))
+	outNameP := fs.String("outName", DEF_OUT, "name of output file where banner in .png format will be saved")
+	inp := Input{widthP, heightP, []*string{textP, subtextP}, painterP, tileSizeP, outPalP, outNameP}
+	return fs, inp
 }
 
 // Parses commandline parameters and gives
@@ -56,26 +81,7 @@ type Input struct {
 // name of .png output file
 // TODO - sanitize input
 func GetInput(painterAlgs []Alg) Input {
-
-	const DEF_WIDTH = 800
-	const DEF_HEIGHT = 600
-	const DEF_TITLE = "My blogpost"
-	const DEF_SUB = "this time about really important things"
-	const DEF_TILE = 30
-	const DEF_ALG = 5
-	const DEF_OUT = "out.png"
-	const DEF_PAL = Warm
-
-	widthP := flag.Int("width", DEF_WIDTH, "width of the resulting image")
-	heightP := flag.Int("height", DEF_HEIGHT, "height of the resulting image")
-	textP := flag.String("text", DEF_TITLE, "text to display in the image")
-	subtextP := flag.String("subtext", DEF_SUB, "explanatory text to display in the image below the text")
-	painterP := flag.Int("alg", DEF_ALG, fmt.Sprintf("Background painter algorithm; valid values are: %v", descriptions(makeInterfaceAlg(painterAlgs))))
-	tileSizeP := flag.Float64("ts", DEF_TILE, "size of tile")
-	outPalP := flag.Int("palette", int(DEF_PAL), fmt.Sprintf("palette type; valid values are: %v", descriptions(makeInterfacePaletteType(paletteGenerators))))
-	outNameP := flag.String("outName", DEF_OUT, "name of output file where banner in .png format will be saved")
-
-	flag.Parse()
-
-	return Input{*widthP, *heightP, Texts{*textP, *subtextP}, *painterP, *tileSizeP, fromIntToPaletteType(*outPalP), *outNameP}
+	fs, inp := InputFlagSet()
+	fs.Parse(os.Args)
+	return inp
 }

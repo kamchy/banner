@@ -79,18 +79,21 @@ var painterAlgs = []Alg{
 	{DrawHexagon, "random hexagons with offset", gridDeltaGenerator},
 }
 
-// Draws bacground using patternDraw function and both texts on canvas of size [w x h]
+// Draws with pc as PatternContext, filling background with patternDraw and using Textx.
 func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
 	patternDraw(pc)
 	textDraw(pc, texts)
 }
 
 func GenerateBanner(i Input) {
-	drawContext := gg.NewContext(i.w, i.h)
-	var canvasSize = Size{float64(i.w), float64(i.h)}
-	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(i.pt, 10)}
-	Draw(cc, i.texts, generatingFn(painterAlgs[i.algIdx], i.tileSize))
-	cc.dc.SavePNG(i.outName)
+	wi, hi, palette, algIdx, tileSize, outName, texts :=
+		*i.w, *i.h, fromIntToPaletteType(*i.pt), *i.algIdx, *i.tileSize, *i.outName, Texts{*i.texts[0], *i.texts[1]}
+
+	drawContext := gg.NewContext(wi, hi)
+	var canvasSize = Size{float64(wi), float64(hi)}
+	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(palette, 10)}
+	Draw(cc, texts, generatingFn(painterAlgs[algIdx], tileSize))
+	cc.dc.SavePNG(outName)
 
 }
 func main() {
