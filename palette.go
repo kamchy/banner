@@ -5,10 +5,24 @@ import "github.com/lucasb-eyer/go-colorful"
 type Palette = []colorful.Color
 type PaletteType int
 
+func fromIntToPaletteType(v int) PaletteType {
+	switch v {
+	case 0:
+		return Warm
+	case 1:
+		return Happy
+	default:
+		return Unknown
+	}
+}
+
 const (
 	Warm PaletteType = iota
 	Happy
+	Unknown
 )
+
+var paletteGenerators []PaletteType = []PaletteType{Warm, Happy}
 
 type PaletteGenerator interface {
 	Generate(int) Palette
@@ -28,11 +42,18 @@ func (t PaletteType) Generate(n int) Palette {
 	}
 	return ret
 }
-func GenPaletteOf(t PaletteType, n int) Palette {
-	return t.Generate(n)
+
+func (t PaletteType) Desc() string {
+	switch t {
+	case Warm:
+		return "Warm"
+	case Happy:
+		return "Happy"
+	default:
+		return "Unknown"
+	}
 }
 
-// Generates palette for pattern and text bg
-func GenPalette() []colorful.Color {
-	return GenPaletteOf(Warm, 10)
+func GenPaletteOf(t PaletteGenerator, n int) Palette {
+	return t.Generate(n)
 }

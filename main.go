@@ -88,7 +88,7 @@ func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
 func GenerateBanner(i Input) {
 	drawContext := gg.NewContext(i.w, i.h)
 	var canvasSize = Size{float64(i.w), float64(i.h)}
-	cc := PatternContext{canvasSize, drawContext, GenPalette()}
+	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(i.pt, 10)}
 	Draw(cc, i.texts, generatingFn(painterAlgs[i.algIdx], i.tileSize))
 	cc.dc.SavePNG(i.outName)
 
