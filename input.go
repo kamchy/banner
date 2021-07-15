@@ -46,7 +46,7 @@ type Input struct {
 func InputFlagSet() (*flag.FlagSet, Input) {
 	fs := flag.NewFlagSet(
 		"input",
-		flag.ContinueOnError)
+		flag.ExitOnError)
 
 	widthP := fs.Int(
 		"width",
@@ -58,20 +58,17 @@ func InputFlagSet() (*flag.FlagSet, Input) {
 	subtextP := fs.String("subtext", DEF_SUB, "explanatory text to display in the image below the text")
 	painterP := fs.Int("alg", DEF_ALG, fmt.Sprintf("Background painter algorithm; valid values are: %v", descriptionsPA(PainterAlgs)))
 	tileSizeP := fs.Float64("ts", DEF_TILE, "size of tile")
-	outPalP := fs.Int("palette", int(DEF_PAL), fmt.Sprintf("palette type; valid values are: %v", descriptionsPI(PaletteInfos)))
+	outPalP := fs.Int("palette", DEF_PAL, fmt.Sprintf("palette type; valid values are: %v", descriptionsPI(PaletteInfos)))
 	outNameP := fs.String("outName", DEF_OUT, "name of output file where banner in .png format will be saved")
 	inp := Input{widthP, heightP, []*string{textP, subtextP}, painterP, tileSizeP, outPalP, outNameP}
 	return fs, inp
 }
 
 // Parses commandline parameters and gives
-// width - width of resulting image
-// height - height of resulting image
-// Texts - primary and secondary
-// name of .png output file
+// Input object with fields initalized with provided values (or defaults)
 // TODO - sanitize input
 func GetInput() Input {
 	fs, inp := InputFlagSet()
-	fs.Parse(os.Args)
+	fs.Parse(os.Args[1:])
 	return inp
 }
