@@ -101,19 +101,25 @@ var PainterAlgs = map[AlgType]Alg{
 }
 
 // Draws with pc as PatternContext, filling background with patternDraw and using Textx.
-func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
+func Draw(pc PatternContext, useText bool, texts Texts, patternDraw BgFn) {
 	patternDraw(pc)
-	textDraw(pc, texts)
+	if useText {
+		textDraw(pc, texts)
+	}
+}
+func (i *Input) String() string {
+	return fmt.Sprintf("Size: [%dx%d] text (%v) [%s, %s] TileSize %v, outName: %s\n",
+		*i.W, *i.H, *i.WithText, *i.Texts[0], *i.Texts[1], *i.TileSize, *i.OutName)
 }
 
 func GenerateBanner(i Input) {
-	wi, hi, paletteType, algType, tileSize, outName, texts :=
-		*i.W, *i.W, *i.Pt, *i.AlgIdx, *i.TileSize, *i.OutName, Texts{*i.Texts[0], *i.Texts[1]}
+	wi, hi, withText, paletteType, algType, tileSize, outName, texts :=
+		*i.W, *i.H, *i.WithText, *i.Pt, *i.AlgIdx, *i.TileSize, *i.OutName, Texts{*i.Texts[0], *i.Texts[1]}
 
 	drawContext := gg.NewContext(wi, hi)
 	var canvasSize = Size{float64(wi), float64(hi)}
 	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(paletteType, 10)}
-	Draw(cc, texts, generatingFn(PainterAlgs[algType], tileSize))
+	Draw(cc, withText, texts, generatingFn(PainterAlgs[algType], tileSize))
 	cc.dc.SavePNG(outName)
 
 }

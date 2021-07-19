@@ -13,6 +13,7 @@ type PaletteType = int
 const (
 	Warm    PaletteType = iota
 	Happy   PaletteType = iota
+	Hue     PaletteType = iota
 	Unknown PaletteType = iota
 )
 
@@ -49,8 +50,25 @@ func descriptionsPI(vals map[PaletteType]PaletteInfo) string {
 
 var PaletteInfos = map[PaletteType]PaletteInfo{
 	Warm:  PaletteInfo{colorful.WarmPalette, "Warm"},
-	Happy: PaletteInfo{colorful.HappyPalette, "Happy"}}
+	Happy: PaletteInfo{colorful.HappyPalette, "Happy"},
+	Hue:   PaletteInfo{HuePalette, "Hue"},
+}
 
+func HuePalette(n int) (Palette, error) {
+	return huePaletteGenerator(50), nil
+}
+func huePaletteGenerator(inhue int) Palette {
+	var angle byte = 30
+	var delta byte = 10
+	var hue = byte(inhue)
+	cols := make([]colorful.Color, angle*2/delta)
+
+	for h := hue - angle; h <= hue+angle; h += angle {
+		cols = append(cols, colorful.Hsl(float64(h), 0.5, 0.5))
+	}
+	return cols
+
+}
 func GenPaletteOf(t PaletteType, n int) Palette {
 	info, is := PaletteInfos[t]
 	if !is {

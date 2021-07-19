@@ -1,11 +1,9 @@
-// blabla
 package main
 
 import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -35,7 +33,7 @@ func generateReadme(r TemplateData, t *template.Template) string {
 }
 
 func makeInput(algIdx int, palidx int, fname string) ba.Input {
-	t1, t2 := "Go prorgamming", "for fun and profit"
+	t1, t2 := "Go programming", "for fun and profit"
 	w, h := 400, 200
 	tileSize := 30.0
 	return ba.Input{
@@ -54,7 +52,7 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 	images := make([]Image, algsCount*infosCount, algsCount*infosCount)
 	var abs string
 	for algidx, alg := range ba.PainterAlgs {
-		for palidx, pal := range ba.PaletteInfos {
+		for palidx, _ := range ba.PaletteInfos {
 			fName := fmt.Sprintf("out_alg%d_pal%d.png", algidx, palidx)
 			if filepath.IsAbs(dirName) {
 				abs = path.Join(dirName, fName)
@@ -66,7 +64,6 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 				panic(err)
 			}
 			images[algidx*infosCount+palidx] = Image{alg.Desc(), relToCurrent}
-			log.Printf("Generating alg \"%s\" with painter \"%s\" -> %s\n", alg.Desc(), pal.Desc, relToCurrent)
 			ba.GenerateBanner(makeInput(algidx, palidx, abs))
 		}
 	}
@@ -134,7 +131,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	repo := Repo{"banner", "https://github.com/kamchy/banner", generateHelpMessage()}
+	repo := Repo{
+		"banner",
+		"https://github.com/kamchy/banner",
+		generateHelpMessage()}
 	dirName := "/tmp"
 	if len(os.Args) >= 2 {
 		dirName = os.Args[1]
