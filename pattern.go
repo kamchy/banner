@@ -1,6 +1,7 @@
 package banner
 
 import (
+	"image/color"
 	"math"
 
 	"github.com/fogleman/gg"
@@ -21,18 +22,20 @@ func (c PatternContext) withSize(s Size) PatternContext {
 	return PatternContext{s, c.dc, c.p}
 }
 
-// Draws rect of size with first color of the palette
-func DrawRect(c PatternContext) {
-	c.dc.SetColor(c.p[0])
+func rectWith(c PatternContext, colFn func() color.Color) {
+	c.dc.SetColor(colFn())
 	c.dc.DrawRectangle(0, 0, c.size.wi, c.size.hi)
 	c.dc.Fill()
 }
 
+// Draws rect of size with first color of the palette
+func DrawRect(c PatternContext) {
+	rectWith(c, func() color.Color { return c.p[0] })
+}
+
 // Draws rect of size with random color of the palette
 func DrawRectRand(c PatternContext) {
-	c.dc.SetColor(randFrom(c.p))
-	c.dc.DrawRectangle(0, 0, c.size.wi, c.size.hi)
-	c.dc.Fill()
+	rectWith(c, func() color.Color { return randFrom(c.p) })
 }
 
 // Single tile painter: draws concentric circles

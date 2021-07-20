@@ -37,7 +37,6 @@ func descriptions(vals map[int]DescProvider) string {
 type Input struct {
 	W        *int
 	H        *int
-	WithText *bool
 	Texts    []*string
 	AlgIdx   *int
 	TileSize *float64
@@ -52,14 +51,14 @@ func InputFlagSet() (*flag.FlagSet, Input) {
 
 	widthP := fs.Int("w", DEF_WIDTH, "width of the resulting image")
 	heightP := fs.Int("h", DEF_HEIGHT, "height of the resulting image")
-	withT := fs.Bool("r", DEF_WITH_TEXT, "should text be rendered")
-	textP := fs.String("t", DEF_TITLE, "text to display in the image")
-	subtextP := fs.String("st", DEF_SUB, "explanatory text to display in the image below the text")
+	textP := fs.String("t", "", "text to display in the image")
+	subtextP := fs.String("st", "", "explanatory text to display in the image below the text")
 	painterP := fs.Int("alg", DEF_ALG, fmt.Sprintf("Background painter algorithm; valid values are: %v", descriptionsPA(PainterAlgs)))
 	tileSizeP := fs.Float64("ts", DEF_TILE, "size of tile")
 	outPalP := fs.Int("p", DEF_PAL, fmt.Sprintf("palette type; valid values are: %v", descriptionsPI(PaletteInfos)))
 	outNameP := fs.String("o", DEF_OUT, "name of output file where banner in .png format will be saved")
-	inp := Input{widthP, heightP, withT, []*string{textP, subtextP}, painterP, tileSizeP, outPalP, outNameP}
+	textPs := []*string{textP, subtextP}
+	inp := Input{widthP, heightP, textPs, painterP, tileSizeP, outPalP, outNameP}
 	return fs, inp
 }
 

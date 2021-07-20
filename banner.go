@@ -31,8 +31,8 @@ type Point struct {
 
 // Represents rectangle used to draw a tile
 type Rect struct {
-	tl Point
-	s  Size
+	tl   Point
+	size Size
 }
 
 // struct representing drawing algorithm
@@ -60,7 +60,7 @@ func generatingFn(alg Alg, tilesize float64) BgFn {
 		for _, r := range rects {
 			dc.Push()
 			dc.Translate(r.tl.x, r.tl.y)
-			alg.fn(c.withSize(r.s))
+			alg.fn(c.withSize(r.size))
 			dc.Pop()
 		}
 
@@ -101,25 +101,36 @@ var PainterAlgs = map[AlgType]Alg{
 }
 
 // Draws with pc as PatternContext, filling background with patternDraw and using Textx.
-func Draw(pc PatternContext, useText bool, texts Texts, patternDraw BgFn) {
+func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
 	patternDraw(pc)
-	if useText {
+	if texts.atLeastOne() {
 		textDraw(pc, texts)
 	}
 }
 func (i *Input) String() string {
-	return fmt.Sprintf("Size: [%dx%d] text (%v) [%s, %s] TileSize %v, outName: %s\n",
-		*i.W, *i.H, *i.WithText, *i.Texts[0], *i.Texts[1], *i.TileSize, *i.OutName)
+	var ts = []string{"<nil>", "<nil>"}
+	for idx, t := range i.Texts {
+		if t != nil {
+			ts[idx] = *t
+		}
+	}
+	return fmt.Sprintf("Size: [%dx%d] text [%s, %s] TileSize %v, outName: %s\n",
+		*i.W, *i.H, ts[0], ts[1], *i.TileSize, *i.OutName)
 }
 
 func GenerateBanner(i Input) {
-	wi, hi, withText, paletteType, algType, tileSize, outName, texts :=
-		*i.W, *i.H, *i.WithText, *i.Pt, *i.AlgIdx, *i.TileSize, *i.OutName, Texts{*i.Texts[0], *i.Texts[1]}
+	wi, hi, paletteType, algType, tileSize, outName, texts :=
+		*i.W, *i.H, *i.Pt, *i.AlgIdx, *i.TileSize, *i.OutName, Texts{i.Texts[0], i.Texts[1]}
 
+	for idx, p := range texts {
+		if *p == "" {
+			texts[idx] = nil
+		}
+	}
 	drawContext := gg.NewContext(wi, hi)
 	var canvasSize = Size{float64(wi), float64(hi)}
 	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(paletteType, 10)}
-	Draw(cc, withText, texts, generatingFn(PainterAlgs[algType], tileSize))
+	Draw(cc, texts, generatingFn(PainterAlgs[algType], tileSize))
 	cc.dc.SavePNG(outName)
 
 }
