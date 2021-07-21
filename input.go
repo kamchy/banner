@@ -101,6 +101,49 @@ func checkPalettes(v *int, m map[PaletteType]PaletteInfo, def PaletteType) {
 	}
 }
 
+type InpData struct {
+	Alg int
+	H   int
+	O   string
+	P   int
+	T   string
+	St  string
+	Ts  float64
+	W   int
+}
+
+func (id InpData) From(i Input) InpData {
+	id.Alg = *i.AlgIdx
+	id.H = *i.H
+	id.O = *i.OutName
+	id.P = *i.Pt
+	if i.Texts[0] != nil {
+		id.T = *i.Texts[0]
+	}
+	if i.Texts[1] != nil {
+		id.St = *i.Texts[1]
+	}
+	id.Ts = *i.TileSize
+	id.W = *i.W
+	return id
+
+}
+func (i Input) From(id InpData) Input {
+	*i.AlgIdx = id.Alg
+	*i.H = id.H
+	*i.W = id.W
+	*i.OutName = id.O
+	for idx, v := range []string{id.T, id.St} {
+		if v == "" {
+			i.Texts[idx] = nil
+		} else {
+			*i.Texts[idx] = v
+		}
+	}
+	*i.TileSize = id.Ts
+	return i
+}
+
 // Parses commandline parameters and gives
 // Input object with fields initalized with provided values (or defaults)
 // TODO - sanitize input

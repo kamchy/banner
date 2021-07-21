@@ -45,33 +45,6 @@ func (i IntOp) String() string {
 	return strconv.Itoa(int(i))
 }
 
-type InpData struct {
-	alg int
-	h   int
-	o   string
-	p   int
-	t   string
-	st  string
-	ts  float64
-	w   int
-}
-
-func (id InpData) From(i Input) InpData {
-	id.alg = *i.AlgIdx
-	id.h = *i.H
-	id.o = *i.OutName
-	id.p = *i.Pt
-	if i.Texts[0] != nil {
-		id.t = *i.Texts[0]
-	}
-	if i.Texts[1] != nil {
-		id.st = *i.Texts[1]
-	}
-	id.ts = *i.TileSize
-	id.w = *i.W
-	return id
-
-}
 func TestWithLines(t *testing.T) {
 	data := []struct {
 		s string
@@ -89,6 +62,7 @@ func TestWithLines(t *testing.T) {
 	for _, d := range data {
 		ifs, inp := InputFlagSet()
 		ifs.Parse(strings.Split(d.s, "|"))
+		inp.Clamp()
 		got := new(InpData).From(inp)
 		if !(got == d.i) {
 			t.Errorf("Got, expected:\n%+v\n%+v", got, d.i)
@@ -112,8 +86,8 @@ func TestDefaults(t *testing.T) {
 
 	for _, d := range data {
 		ifs, inp := InputFlagSet()
-		ifs.Parse([]string{
-			d.opt, Stringer(d.optval).String()})
+		ifs.Parse([]string{d.opt, Stringer(d.optval).String()})
+		inp.Clamp()
 		if d.fn(inp) != d.expected {
 			t.Errorf("Expected %v to be %v, got %s", d.opt, d.expected, d.fn(inp))
 		}

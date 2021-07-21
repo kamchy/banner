@@ -46,6 +46,20 @@ func makeInput(algIdx int, palidx int, fname string) ba.Input {
 		OutName:  &fname}
 }
 
+func makeDefaultInput() ba.Input {
+	var id = ba.InpData{
+		ba.DEF_WIDTH,
+		ba.DEF_HEIGHT,
+		ba.DEF_TITLE,
+		ba.DEF_SUB,
+		ba.DEF_ALG,
+		ba.DEF_TILE,
+		ba.DEF_PAL,
+		"default.png",
+	}
+	return new(ba.Input).From(id)
+}
+
 func generateImages(cwd string, dirName string) ([]Image, error) {
 	algsCount := len(ba.PainterAlgs)
 	infosCount := len(ba.PaletteInfos)
@@ -66,6 +80,7 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 			images[algidx*infosCount+palidx] = Image{alg.Desc(), relToCurrent}
 			ba.GenerateBanner(makeInput(algidx, palidx, abs))
 		}
+		ba.GenerateBanner(makeDefaultInput())
 	}
 	return images, nil
 }
