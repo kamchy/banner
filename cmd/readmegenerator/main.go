@@ -46,7 +46,7 @@ func makeInput(algIdx int, palidx int, fname string) ba.Input {
 		OutName:  &fname}
 }
 
-func makeDefaultInput() ba.Input {
+func makeDefaultInput(fileName string) ba.Input {
 	var id = ba.InpData{
 		W:   ba.DEF_WIDTH,
 		H:   ba.DEF_HEIGHT,
@@ -55,9 +55,18 @@ func makeDefaultInput() ba.Input {
 		Alg: ba.DEF_ALG,
 		Ts:  ba.DEF_TILE,
 		P:   ba.DEF_PAL,
-		O:   "default.png",
+		O:   fileName,
 	}
 	return new(ba.Input).From(id)
+}
+func absolutePath(cwd string, dirName string, fName string) string {
+	var abs string
+	if filepath.IsAbs(dirName) {
+		abs = path.Join(dirName, fName)
+	} else {
+		abs = path.Join(cwd, dirName, fName)
+	}
+	return abs
 }
 
 func generateImages(cwd string, dirName string) ([]Image, error) {
@@ -68,11 +77,8 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 	for algidx, alg := range ba.PainterAlgs {
 		for palidx, _ := range ba.PaletteInfos {
 			fName := fmt.Sprintf("out_alg%d_pal%d.png", algidx, palidx)
-			if filepath.IsAbs(dirName) {
-				abs = path.Join(dirName, fName)
-			} else {
-				abs = path.Join(cwd, dirName, fName)
-			}
+			abs = absolutePath(cwd, dirName, fName)
+
 			relToCurrent, err := filepath.Rel(cwd, abs)
 			if err != nil {
 				panic(err)
@@ -81,7 +87,7 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 			GenerateBanner(makeInput(algidx, palidx, abs))
 		}
 	}
-	GenerateBanner(makeDefaultInput())
+	GenerateBanner(makeDefaultInput(absolutePath(cwd, dirName, "default.png")))
 	return images, nil
 }
 

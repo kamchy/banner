@@ -16,7 +16,6 @@ The usage options are as follows:
 Usage of input:
   -alg int
     	Background painter algorithm; valid values are: 
-    	5 -> random horizontal lines
     	6 -> random hexagons
     	7 -> random hexagons with offset
     	0 -> random rectangles
@@ -24,6 +23,7 @@ Usage of input:
     	2 -> plain color
     	3 -> concentric circles
     	4 -> concentric circles offset
+    	5 -> random horizontal lines
     	 (default 5)
   -h int
     	height of the resulting image (default 600)
