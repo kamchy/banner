@@ -129,18 +129,13 @@ func (id InpData) From(i Input) InpData {
 
 }
 func (i Input) From(id InpData) Input {
-	*i.AlgIdx = id.Alg
-	*i.H = id.H
-	*i.W = id.W
-	*i.OutName = id.O
-	for idx, v := range []string{id.T, id.St} {
-		if v == "" {
-			i.Texts[idx] = nil
-		} else {
-			*i.Texts[idx] = v
-		}
-	}
-	*i.TileSize = id.Ts
+	i.AlgIdx = &id.Alg
+	i.H = &id.H
+	i.W = &id.W
+	i.OutName = &id.O
+	i.Pt = &id.P
+	i.Texts = []*string{&id.T, &id.St}
+	i.TileSize = &id.Ts
 	return i
 }
 

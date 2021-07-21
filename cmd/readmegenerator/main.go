@@ -48,14 +48,14 @@ func makeInput(algIdx int, palidx int, fname string) ba.Input {
 
 func makeDefaultInput() ba.Input {
 	var id = ba.InpData{
-		ba.DEF_WIDTH,
-		ba.DEF_HEIGHT,
-		ba.DEF_TITLE,
-		ba.DEF_SUB,
-		ba.DEF_ALG,
-		ba.DEF_TILE,
-		ba.DEF_PAL,
-		"default.png",
+		W:   ba.DEF_WIDTH,
+		H:   ba.DEF_HEIGHT,
+		T:   ba.DEF_TITLE,
+		St:  ba.DEF_SUB,
+		Alg: ba.DEF_ALG,
+		Ts:  ba.DEF_TILE,
+		P:   ba.DEF_PAL,
+		O:   "default.png",
 	}
 	return new(ba.Input).From(id)
 }
@@ -78,13 +78,17 @@ func generateImages(cwd string, dirName string) ([]Image, error) {
 				panic(err)
 			}
 			images[algidx*infosCount+palidx] = Image{alg.Desc(), relToCurrent}
-			ba.GenerateBanner(makeInput(algidx, palidx, abs))
+			GenerateBanner(makeInput(algidx, palidx, abs))
 		}
-		ba.GenerateBanner(makeDefaultInput())
 	}
+	GenerateBanner(makeDefaultInput())
 	return images, nil
 }
 
+func GenerateBanner(i ba.Input) {
+	fmt.Printf("Generating  %+v\n", new(ba.InpData).From(i))
+	ba.GenerateBanner(i)
+}
 func getTemplate() (*template.Template, error) {
 	var tmpl, err = template.New("test").Parse(`
 # Project

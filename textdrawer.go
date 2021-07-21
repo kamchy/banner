@@ -8,13 +8,6 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
-type Texts [2]*string
-
-func (ts Texts) atLeastOne() bool {
-	res := ts[0] != nil || ts[1] != nil
-	return res
-}
-
 func DrawT(dc *gg.Context, t Text, textMaxWidth float64) {
 	dc.LoadFontFace(FONT_FILE, t.fontSize)
 	dc.DrawStringWrapped(t.t, 0, 0, 0, 0, textMaxWidth, t.spacing, gg.AlignLeft)
@@ -55,7 +48,7 @@ func (s Text) Size(dc *gg.Context, width float64) Size {
 	return Size{w, h}
 }
 
-func makeText(texts Texts, fs []float64) []Text {
+func makeText(texts []*string, fs []float64) []Text {
 	tts := make([]Text, 0)
 	for idx, text := range texts {
 		if text != nil {
@@ -92,7 +85,7 @@ func calcTextHeight(c PatternContext, tts []Text, width float64) float64 {
 	return hi
 }
 
-func textDraw(c PatternContext, texts Texts) {
+func textDraw(c PatternContext, texts []*string) {
 	size, dc, _ := c.size, c.dc, c.p
 	tSizes := sizeToFontSize(size)
 	textWidth := size.wi * 0.8

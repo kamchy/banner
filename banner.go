@@ -101,9 +101,9 @@ var PainterAlgs = map[AlgType]Alg{
 }
 
 // Draws with pc as PatternContext, filling background with patternDraw and using Textx.
-func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
+func Draw(pc PatternContext, texts []*string, patternDraw BgFn) {
 	patternDraw(pc)
-	if texts.atLeastOne() {
+	if texts[0] != nil || texts[1] != nil {
 		textDraw(pc, texts)
 	}
 }
@@ -111,17 +111,10 @@ func Draw(pc PatternContext, texts Texts, patternDraw BgFn) {
 func GenerateBanner(i Input) {
 	i.Clamp()
 	var v InpData = new(InpData).From(i)
-	var texts Texts
-
-	for idx, p := range []string{v.T, v.St} {
-		if p == "" {
-			texts[idx] = nil
-		}
-	}
 	drawContext := gg.NewContext(v.W, v.H)
 	var canvasSize = Size{float64(v.W), float64(v.H)}
 	cc := PatternContext{canvasSize, drawContext, GenPaletteOf(v.P, 10)}
-	Draw(cc, texts, generatingFn(PainterAlgs[v.Alg], v.Ts))
+	Draw(cc, i.Texts, generatingFn(PainterAlgs[v.Alg], v.Ts))
 	cc.dc.SavePNG(v.O)
 
 }
