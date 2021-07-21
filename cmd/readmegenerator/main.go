@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -26,10 +28,8 @@ type TemplateData struct {
 	Images []Image
 }
 
-func generateReadme(r TemplateData, t *template.Template) string {
-	var b bytes.Buffer
-	t.Execute(&b, r)
-	return b.String()
+func generateReadme(wr io.Writer, r TemplateData, t *template.Template) {
+	t.Execute(wr, r)
 }
 
 func makeInput(algIdx int, palidx int, fname string) ba.Input {
@@ -136,21 +136,26 @@ func main() {
 		"https://github.com/kamchy/banner",
 		generateHelpMessage()}
 
-	dirName := "/tmp"
-	if len(os.Args) >= 2 {
-		dirName = os.Args[1]
-	}
+	dirName := flag.String("o", "/tmp", "output directory for generated images")
+	readmeName := flag.String("r", "/tmp/README.md", "output file name")
+	flag.Parse()
+
 	cwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	images, err := generateImages(cwd, dirName)
+	images, err := generateImages(cwd, *dirName)
 	if err != nil {
 		panic(err)
 	}
 
 	td := TemplateData{repo, images}
-	s := generateReadme(td, t)
-	fmt.Println(s)
+	tf, err := os.Create(*readmeName)
+	defer func() { fmt.Println("Closing ", *readmeName); tf.Close() }()
+
+	if err != nil {
+		panic(err)
+	}
+	generateReadme(tf, td, t)
 
 }

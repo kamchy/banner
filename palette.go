@@ -49,22 +49,24 @@ func descriptionsPI(vals map[PaletteType]PaletteInfo) string {
 }
 
 var PaletteInfos = map[PaletteType]PaletteInfo{
-	Warm:  PaletteInfo{colorful.WarmPalette, "Warm"},
-	Happy: PaletteInfo{colorful.HappyPalette, "Happy"},
-	Hue:   PaletteInfo{HuePalette, "Hue"},
+	Warm:  {colorful.WarmPalette, "Warm"},
+	Happy: {colorful.HappyPalette, "Happy"},
+	Hue:   {HuePalette, "Hue"},
 }
 
 func HuePalette(n int) (Palette, error) {
-	return huePaletteGenerator(50), nil
+	return huePaletteGenerator(30), nil
 }
 func huePaletteGenerator(inhue int) Palette {
-	var angle byte = 30
-	var delta byte = 10
-	var hue = byte(inhue)
-	cols := make([]colorful.Color, angle*2/delta)
+	var angle = 60
+	var delta = 20
+	var hue = inhue
+	cols := make([]colorful.Color, 0)
 
-	for h := hue - angle; h <= hue+angle; h += angle {
-		cols = append(cols, colorful.Hsl(float64(h), 0.5, 0.5))
+	for h := hue - angle; h <= hue+angle; h += delta {
+		hh := float64((h + 360) % int(360))
+		c := colorful.Hsl(hh, 0.36, 0.55)
+		cols = append(cols, c)
 	}
 	return cols
 

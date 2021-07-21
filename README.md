@@ -16,31 +16,32 @@ The usage options are as follows:
 Usage of input:
   -alg int
     	Background painter algorithm; valid values are: 
-    	4 -&gt; concentric circles offset
-    	5 -&gt; random horizontal lines
-    	6 -&gt; random hexagons
-    	7 -&gt; random hexagons with offset
-    	0 -&gt; random rectangles
-    	1 -&gt; random rectangles with offset
-    	2 -&gt; plain color
-    	3 -&gt; concentric circles
+    	5 -> random horizontal lines
+    	6 -> random hexagons
+    	7 -> random hexagons with offset
+    	0 -> random rectangles
+    	1 -> random rectangles with offset
+    	2 -> plain color
+    	3 -> concentric circles
+    	4 -> concentric circles offset
     	 (default 5)
-  -height int
+  -h int
     	height of the resulting image (default 600)
-  -outName string
-    	name of output file where banner in .png format will be saved (default &#34;out.png&#34;)
-  -palette int
+  -o string
+    	name of output file where banner in .png format will be saved (default "out.png")
+  -p int
     	palette type; valid values are: 
-    	0 -&gt; Warm
-    	1 -&gt; Happy
+    	0 -> Warm
+    	1 -> Happy
+    	2 -> Hue
     	
-  -subtext string
-    	explanatory text to display in the image below the text (default &#34;this time about really important things&#34;)
-  -text string
-    	text to display in the image (default &#34;My blogpost&#34;)
+  -st string
+    	explanatory text to display in the image below the text
+  -t string
+    	text to display in the image
   -ts float
     	size of tile (default 30)
-  -width int
+  -w int
     	width of the resulting image (default 800)
 
 ```
@@ -62,52 +63,75 @@ cd ../..
 And here are images:
 
 
-### Image img/out_alg0_pal0.png
-![random rectangles](img/out_alg0_pal0.png)
+### Image ../../img/out_alg0_pal0.png
+![random rectangles](../../img/out_alg0_pal0.png)
 
-### Image img/out_alg0_pal1.png
-![random rectangles](img/out_alg0_pal1.png)
+### Image ../../img/out_alg0_pal1.png
+![random rectangles](../../img/out_alg0_pal1.png)
 
-### Image img/out_alg1_pal0.png
-![random rectangles with offset](img/out_alg1_pal0.png)
+### Image ../../img/out_alg0_pal2.png
+![random rectangles](../../img/out_alg0_pal2.png)
 
-### Image img/out_alg1_pal1.png
-![random rectangles with offset](img/out_alg1_pal1.png)
+### Image ../../img/out_alg1_pal0.png
+![random rectangles with offset](../../img/out_alg1_pal0.png)
 
-### Image img/out_alg2_pal0.png
-![plain color](img/out_alg2_pal0.png)
+### Image ../../img/out_alg1_pal1.png
+![random rectangles with offset](../../img/out_alg1_pal1.png)
 
-### Image img/out_alg2_pal1.png
-![plain color](img/out_alg2_pal1.png)
+### Image ../../img/out_alg1_pal2.png
+![random rectangles with offset](../../img/out_alg1_pal2.png)
 
-### Image img/out_alg3_pal0.png
-![concentric circles](img/out_alg3_pal0.png)
+### Image ../../img/out_alg2_pal0.png
+![plain color](../../img/out_alg2_pal0.png)
 
-### Image img/out_alg3_pal1.png
-![concentric circles](img/out_alg3_pal1.png)
+### Image ../../img/out_alg2_pal1.png
+![plain color](../../img/out_alg2_pal1.png)
 
-### Image img/out_alg4_pal0.png
-![concentric circles offset](img/out_alg4_pal0.png)
+### Image ../../img/out_alg2_pal2.png
+![plain color](../../img/out_alg2_pal2.png)
 
-### Image img/out_alg4_pal1.png
-![concentric circles offset](img/out_alg4_pal1.png)
+### Image ../../img/out_alg3_pal0.png
+![concentric circles](../../img/out_alg3_pal0.png)
 
-### Image img/out_alg5_pal0.png
-![random horizontal lines](img/out_alg5_pal0.png)
+### Image ../../img/out_alg3_pal1.png
+![concentric circles](../../img/out_alg3_pal1.png)
 
-### Image img/out_alg5_pal1.png
-![random horizontal lines](img/out_alg5_pal1.png)
+### Image ../../img/out_alg3_pal2.png
+![concentric circles](../../img/out_alg3_pal2.png)
 
-### Image img/out_alg6_pal0.png
-![random hexagons](img/out_alg6_pal0.png)
+### Image ../../img/out_alg4_pal0.png
+![concentric circles offset](../../img/out_alg4_pal0.png)
 
-### Image img/out_alg6_pal1.png
-![random hexagons](img/out_alg6_pal1.png)
+### Image ../../img/out_alg4_pal1.png
+![concentric circles offset](../../img/out_alg4_pal1.png)
 
-### Image img/out_alg7_pal0.png
-![random hexagons with offset](img/out_alg7_pal0.png)
+### Image ../../img/out_alg4_pal2.png
+![concentric circles offset](../../img/out_alg4_pal2.png)
 
-### Image img/out_alg7_pal1.png
-![random hexagons with offset](img/out_alg7_pal1.png)
+### Image ../../img/out_alg5_pal0.png
+![random horizontal lines](../../img/out_alg5_pal0.png)
 
+### Image ../../img/out_alg5_pal1.png
+![random horizontal lines](../../img/out_alg5_pal1.png)
+
+### Image ../../img/out_alg5_pal2.png
+![random horizontal lines](../../img/out_alg5_pal2.png)
+
+### Image ../../img/out_alg6_pal0.png
+![random hexagons](../../img/out_alg6_pal0.png)
+
+### Image ../../img/out_alg6_pal1.png
+![random hexagons](../../img/out_alg6_pal1.png)
+
+### Image ../../img/out_alg6_pal2.png
+![random hexagons](../../img/out_alg6_pal2.png)
+
+### Image ../../img/out_alg7_pal0.png
+![random hexagons with offset](../../img/out_alg7_pal0.png)
+
+### Image ../../img/out_alg7_pal1.png
+![random hexagons with offset](../../img/out_alg7_pal1.png)
+
+### Image ../../img/out_alg7_pal2.png
+![random hexagons with offset](../../img/out_alg7_pal2.png)
 

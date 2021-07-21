@@ -1,7 +1,6 @@
 package banner
 
 import (
-	"fmt"
 	"image/color"
 	"strings"
 
@@ -57,7 +56,6 @@ func (s Text) Size(dc *gg.Context, width float64) Size {
 }
 
 func makeText(texts Texts, fs []float64) []Text {
-	fmt.Printf("Texts: %v", texts)
 	tts := make([]Text, 0)
 	for idx, text := range texts {
 		if text != nil {

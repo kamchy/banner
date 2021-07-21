@@ -58,8 +58,47 @@ func InputFlagSet() (*flag.FlagSet, Input) {
 	outPalP := fs.Int("p", DEF_PAL, fmt.Sprintf("palette type; valid values are: %v", descriptionsPI(PaletteInfos)))
 	outNameP := fs.String("o", DEF_OUT, "name of output file where banner in .png format will be saved")
 	textPs := []*string{textP, subtextP}
-	inp := Input{widthP, heightP, textPs, painterP, tileSizeP, outPalP, outNameP}
+	inp := Input{
+		widthP,
+		heightP,
+		textPs,
+		painterP,
+		tileSizeP,
+		outPalP,
+		outNameP}
 	return fs, inp
+}
+
+func (i *Input) Clamp() {
+	checkAlgs(i.AlgIdx, PainterAlgs, DEF_ALG)
+	checkPalettes(i.Pt, PaletteInfos, DEF_PAL)
+	checkInt(i.W, DEF_WIDTH, 30, 2048)
+	checkInt(i.H, DEF_HEIGHT, 30, 2048)
+	checkFloat(i.TileSize, DEF_TILE, 5, 2048)
+}
+
+func checkInt(v *int, def int, min int, max int) {
+	if *v < min || *v > max {
+		*v = def
+	}
+}
+func checkFloat(v *float64, def float64, min float64, max float64) {
+	if *v < min || *v > max {
+		*v = def
+	}
+}
+func checkAlgs(v *int, m map[AlgType]Alg, def AlgType) {
+	_, ok := m[*v]
+	if !ok {
+		*v = def
+	}
+}
+
+func checkPalettes(v *int, m map[PaletteType]PaletteInfo, def PaletteType) {
+	_, ok := m[*v]
+	if !ok {
+		*v = def
+	}
 }
 
 // Parses commandline parameters and gives

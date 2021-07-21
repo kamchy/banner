@@ -41,11 +41,13 @@ func DrawRectRand(c PatternContext) {
 // Single tile painter: draws concentric circles
 func DrawHexagon(c PatternContext) {
 	size, dc, palette := c.size, c.dc, c.p
-	DrawRect(c.withPalette([]colorful.Color{colorful.Hsl(33.0, 0.2, 0.7)}))
+	DrawRect(c.withPalette([]colorful.Color{colorful.Hsl(330.0, 0.5, 0.7)}))
 	s := math.Min(size.wi, size.hi)
 	dc.SetColor(randFrom(palette[1:]))
 	dc.DrawRegularPolygon(6, s/2, s/2, s/2, 30.0*2*math.Pi/360.0)
 	dc.Fill()
+	dc.DrawRegularPolygon(6, s/2, s/2, s/2, 30.0*2*math.Pi/360.0)
+	dc.Stroke()
 }
 
 // Single tile painter: draws concentric circles
