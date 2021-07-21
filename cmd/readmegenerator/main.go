@@ -3,10 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"os"
 	"path"
 	"path/filepath"
+	"text/template"
 
 	ba "github.com/kamchy/banner"
 )
@@ -135,6 +135,7 @@ func main() {
 		"banner",
 		"https://github.com/kamchy/banner",
 		generateHelpMessage()}
+
 	dirName := "/tmp"
 	if len(os.Args) >= 2 {
 		dirName = os.Args[1]
