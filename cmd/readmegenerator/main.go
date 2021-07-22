@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -26,10 +25,6 @@ type Image struct {
 type TemplateData struct {
 	Repo
 	Images []Image
-}
-
-func generateReadme(wr io.Writer, r TemplateData, t *template.Template) {
-	t.Execute(wr, r)
 }
 
 func makeInput(algIdx int, palidx int, fname string) ba.Input {
@@ -69,25 +64,18 @@ func absolutePath(cwd string, dirName string, fName string) string {
 	return abs
 }
 
-func generateImages(cwd string, dirName string) ([]Image, error) {
+func generateImages(imgDirName string) ([]Image, error) {
 	algsCount := len(ba.PainterAlgs)
 	infosCount := len(ba.PaletteInfos)
 	images := make([]Image, algsCount*infosCount, algsCount*infosCount)
-	var abs string
 	for algidx, alg := range ba.PainterAlgs {
 		for palidx, _ := range ba.PaletteInfos {
 			fName := fmt.Sprintf("out_alg%d_pal%d.png", algidx, palidx)
-			abs = absolutePath(cwd, dirName, fName)
-
-			relToCurrent, err := filepath.Rel(cwd, abs)
-			if err != nil {
-				panic(err)
-			}
-			images[algidx*infosCount+palidx] = Image{alg.Desc(), relToCurrent}
-			GenerateBanner(makeInput(algidx, palidx, abs))
+			images[algidx*infosCount+palidx] = Image{alg.Desc(), filepath.Join("img", fName)}
+			GenerateBanner(makeInput(algidx, palidx, filepath.Join(imgDirName, fName)))
 		}
 	}
-	GenerateBanner(makeDefaultInput(absolutePath(cwd, dirName, "default.png")))
+	GenerateBanner(makeDefaultInput(filepath.Join(imgDirName, "default.png")))
 	return images, nil
 }
 
@@ -125,9 +113,9 @@ For details, see [the source](https://github.com/kamchy/banner/blob/main/src/rea
 
 ` + "```" +
 		`bash
-cd /cmd/readmegenerator && go build
+cd /cmd/readmegenerator && go build .
 cd ../..
-./cmd/readmegenerator/readmegenerator img > README.md
+./cmd/readmegenerator/readmegenerator ../..
 ` + "```" +
 		`
 
@@ -150,7 +138,14 @@ func generateHelpMessage() string {
 	ifs.Usage()
 	return b.String()
 }
-
+func createImgPath(targetDir string) string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	imgPath := filepath.Join(cwd, targetDir, "img")
+	return imgPath
+}
 func main() {
 	t, err := getTemplate()
 	if err != nil {
@@ -161,26 +156,24 @@ func main() {
 		"https://github.com/kamchy/banner",
 		generateHelpMessage()}
 
-	dirName := flag.String("o", "/tmp", "output directory for generated images")
-	readmeName := flag.String("r", "/tmp/README.md", "output file name")
+	targetDir := flag.String("o", ".", "directory where img subdirectory will be created and filled with images and README.md file generated")
 	flag.Parse()
 
-	cwd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	images, err := generateImages(cwd, *dirName)
+	imageDescriptions, err := generateImages(createImgPath(*targetDir))
 	if err != nil {
 		panic(err)
 	}
 
-	td := TemplateData{repo, images}
-	tf, err := os.Create(*readmeName)
-	defer func() { fmt.Println("Closing ", *readmeName); tf.Close() }()
+	td := TemplateData{repo, imageDescriptions}
+
+	rfile := filepath.Join(*targetDir, "README.md")
+	tf, err := os.Create(rfile)
+	fmt.Println("Creating ", rfile)
+	defer func() { fmt.Println("Closing ", rfile); tf.Close() }()
 
 	if err != nil {
 		panic(err)
 	}
-	generateReadme(tf, td, t)
+	t.Execute(tf, td)
 
 }

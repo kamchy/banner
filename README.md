@@ -16,7 +16,6 @@ The usage options are as follows:
 Usage of input:
   -alg int
     	Background painter algorithm; valid values are: 
-    	6 -> random hexagons
     	7 -> random hexagons with offset
     	0 -> random rectangles
     	1 -> random rectangles with offset
@@ -24,6 +23,7 @@ Usage of input:
     	3 -> concentric circles
     	4 -> concentric circles offset
     	5 -> random horizontal lines
+    	6 -> random hexagons
     	 (default 5)
   -h int
     	height of the resulting image (default 600)
@@ -54,84 +54,84 @@ For details, see [the source](https://github.com/kamchy/banner/blob/main/src/rea
 ### Usage
 
 ```bash
-cd /cmd/readmegenerator && go build
+cd /cmd/readmegenerator && go build .
 cd ../..
-./cmd/readmegenerator/readmegenerator img > README.md
+./cmd/readmegenerator/readmegenerator ../..
 ```
 
 ## Images
 And here are images:
 
 
-### Image ../../img/out_alg0_pal0.png
-![random rectangles](../../img/out_alg0_pal0.png)
+### Image img/out_alg0_pal0.png
+![random rectangles](img/out_alg0_pal0.png)
 
-### Image ../../img/out_alg0_pal1.png
-![random rectangles](../../img/out_alg0_pal1.png)
+### Image img/out_alg0_pal1.png
+![random rectangles](img/out_alg0_pal1.png)
 
-### Image ../../img/out_alg0_pal2.png
-![random rectangles](../../img/out_alg0_pal2.png)
+### Image img/out_alg0_pal2.png
+![random rectangles](img/out_alg0_pal2.png)
 
-### Image ../../img/out_alg1_pal0.png
-![random rectangles with offset](../../img/out_alg1_pal0.png)
+### Image img/out_alg1_pal0.png
+![random rectangles with offset](img/out_alg1_pal0.png)
 
-### Image ../../img/out_alg1_pal1.png
-![random rectangles with offset](../../img/out_alg1_pal1.png)
+### Image img/out_alg1_pal1.png
+![random rectangles with offset](img/out_alg1_pal1.png)
 
-### Image ../../img/out_alg1_pal2.png
-![random rectangles with offset](../../img/out_alg1_pal2.png)
+### Image img/out_alg1_pal2.png
+![random rectangles with offset](img/out_alg1_pal2.png)
 
-### Image ../../img/out_alg2_pal0.png
-![plain color](../../img/out_alg2_pal0.png)
+### Image img/out_alg2_pal0.png
+![plain color](img/out_alg2_pal0.png)
 
-### Image ../../img/out_alg2_pal1.png
-![plain color](../../img/out_alg2_pal1.png)
+### Image img/out_alg2_pal1.png
+![plain color](img/out_alg2_pal1.png)
 
-### Image ../../img/out_alg2_pal2.png
-![plain color](../../img/out_alg2_pal2.png)
+### Image img/out_alg2_pal2.png
+![plain color](img/out_alg2_pal2.png)
 
-### Image ../../img/out_alg3_pal0.png
-![concentric circles](../../img/out_alg3_pal0.png)
+### Image img/out_alg3_pal0.png
+![concentric circles](img/out_alg3_pal0.png)
 
-### Image ../../img/out_alg3_pal1.png
-![concentric circles](../../img/out_alg3_pal1.png)
+### Image img/out_alg3_pal1.png
+![concentric circles](img/out_alg3_pal1.png)
 
-### Image ../../img/out_alg3_pal2.png
-![concentric circles](../../img/out_alg3_pal2.png)
+### Image img/out_alg3_pal2.png
+![concentric circles](img/out_alg3_pal2.png)
 
-### Image ../../img/out_alg4_pal0.png
-![concentric circles offset](../../img/out_alg4_pal0.png)
+### Image img/out_alg4_pal0.png
+![concentric circles offset](img/out_alg4_pal0.png)
 
-### Image ../../img/out_alg4_pal1.png
-![concentric circles offset](../../img/out_alg4_pal1.png)
+### Image img/out_alg4_pal1.png
+![concentric circles offset](img/out_alg4_pal1.png)
 
-### Image ../../img/out_alg4_pal2.png
-![concentric circles offset](../../img/out_alg4_pal2.png)
+### Image img/out_alg4_pal2.png
+![concentric circles offset](img/out_alg4_pal2.png)
 
-### Image ../../img/out_alg5_pal0.png
-![random horizontal lines](../../img/out_alg5_pal0.png)
+### Image img/out_alg5_pal0.png
+![random horizontal lines](img/out_alg5_pal0.png)
 
-### Image ../../img/out_alg5_pal1.png
-![random horizontal lines](../../img/out_alg5_pal1.png)
+### Image img/out_alg5_pal1.png
+![random horizontal lines](img/out_alg5_pal1.png)
 
-### Image ../../img/out_alg5_pal2.png
-![random horizontal lines](../../img/out_alg5_pal2.png)
+### Image img/out_alg5_pal2.png
+![random horizontal lines](img/out_alg5_pal2.png)
 
-### Image ../../img/out_alg6_pal0.png
-![random hexagons](../../img/out_alg6_pal0.png)
+### Image img/out_alg6_pal0.png
+![random hexagons](img/out_alg6_pal0.png)
 
-### Image ../../img/out_alg6_pal1.png
-![random hexagons](../../img/out_alg6_pal1.png)
+### Image img/out_alg6_pal1.png
+![random hexagons](img/out_alg6_pal1.png)
 
-### Image ../../img/out_alg6_pal2.png
-![random hexagons](../../img/out_alg6_pal2.png)
+### Image img/out_alg6_pal2.png
+![random hexagons](img/out_alg6_pal2.png)
 
-### Image ../../img/out_alg7_pal0.png
-![random hexagons with offset](../../img/out_alg7_pal0.png)
+### Image img/out_alg7_pal0.png
+![random hexagons with offset](img/out_alg7_pal0.png)
 
-### Image ../../img/out_alg7_pal1.png
-![random hexagons with offset](../../img/out_alg7_pal1.png)
+### Image img/out_alg7_pal1.png
+![random hexagons with offset](img/out_alg7_pal1.png)
 
-### Image ../../img/out_alg7_pal2.png
-![random hexagons with offset](../../img/out_alg7_pal2.png)
+### Image img/out_alg7_pal2.png
+![random hexagons with offset](img/out_alg7_pal2.png)
 
