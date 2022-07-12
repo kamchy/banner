@@ -97,7 +97,7 @@ var PainterAlgs = map[AlgType]Alg{
 	ConcentricCirclesOffset: {DrawBgCircles, "concentric circles offset", gridDeltaGenerator},
 	HorizontalLines:         {DrawBgLines, "random horizontal lines", linesRandomGenerator},
 	RandomHexagons:          {DrawHexagon, "random hexagons", gridGenerator},
-	RandomHexagonsOffset:    {DrawHexagon, "random hexagons with offset", gridDeltaGenerator},
+	RandomHexagonsOffset:    {DrawHexagon2, "random hexagons with offset", gridHexDeltaGenerator},
 }
 
 // Draws with pc as PatternContext, filling background with patternDraw and using Textx.
@@ -109,7 +109,6 @@ func Draw(pc PatternContext, texts []*string, patternDraw BgFn) {
 }
 
 func GenerateBanner(i Input) {
-	i.Clamp()
 	var v InpData = new(InpData).From(i)
 	drawContext := gg.NewContext(v.W, v.H)
 	var canvasSize = Size{float64(v.W), float64(v.H)}

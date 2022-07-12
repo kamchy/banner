@@ -69,7 +69,7 @@ func InputFlagSet() (*flag.FlagSet, Input) {
 	return fs, inp
 }
 
-func (i *Input) Clamp() {
+func (i *Input) clamp() {
 	checkAlgs(i.AlgIdx, PainterAlgs, DEF_ALG)
 	checkPalettes(i.Pt, PaletteInfos, DEF_PAL)
 	checkInt(i.W, DEF_WIDTH, 30, 2048)
@@ -113,6 +113,7 @@ type InpData struct {
 }
 
 func (id InpData) From(i Input) InpData {
+	i.clamp()
 	id.Alg = *i.AlgIdx
 	id.H = *i.H
 	id.O = *i.OutName

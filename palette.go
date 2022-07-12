@@ -11,13 +11,13 @@ type Palette = []colorful.Color
 type PaletteType = int
 
 const (
-	Warm    PaletteType = iota
-	Happy   PaletteType = iota
-	Hue     PaletteType = iota
-	Unknown PaletteType = iota
+	Warm PaletteType = iota
+	Happy
+	Hue
+	Unknown
 )
 
-func DefaultPalette(t int, n int) Palette {
+func DefaultPalette(t PaletteType, n int) Palette {
 	var single = func() colorful.Color {
 		return colorful.Hsl(float64(rand.Intn(360)), 0.5, 0.5)
 	}
@@ -55,7 +55,7 @@ var PaletteInfos = map[PaletteType]PaletteInfo{
 }
 
 func HuePalette(n int) (Palette, error) {
-	return huePaletteGenerator(30), nil
+	return huePaletteGenerator(n), nil
 }
 func huePaletteGenerator(inhue int) Palette {
 	var angle = 60

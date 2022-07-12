@@ -53,6 +53,37 @@ func gridDeltaGenerator(p Point, s Size, ts Size) []Rect {
 	}
 	return iteration(p, s, ts, lg)
 }
+func gridHexDeltaGenerator(p Point, s Size, ts Size) []Rect {
+
+	r := ts.wi / 2.0
+	h := r * math.Sqrt(3.0) / 2.0
+	res := make([]Rect, 0, 1)
+	ox, oy := 0.0, 0.0
+	col, row := 0, 0
+	delta := func(row int) float64 {
+		if row%2 == 0 {
+			return r + h/2.0 //-3 * r / 2
+		} else {
+			return 0
+		}
+	}
+	rectSize := Size{3.0 * r, h}
+
+	for oy < s.hi+ts.hi {
+		deltaRow := delta(row)
+		for ox < s.wi+ts.wi {
+			tl := Point{ox + deltaRow, oy}
+			res = append(res, Rect{tl, rectSize})
+			col++
+			ox += rectSize.wi
+		}
+		col = 0
+		row++
+		ox = 0
+		oy += rectSize.hi
+	}
+	return res
+}
 
 // Generates one-element slice with a Rect of size s and top left at p
 func plainGenerator(p Point, s Size, _ Size) []Rect {

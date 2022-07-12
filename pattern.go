@@ -38,7 +38,7 @@ func DrawRectRand(c PatternContext) {
 	rectWith(c, func() color.Color { return randFrom(c.p) })
 }
 
-// Single tile painter: draws concentric circles
+// DrawHexagon draws hexagon
 func DrawHexagon(c PatternContext) {
 	size, dc, palette := c.size, c.dc, c.p
 	DrawRect(c.withPalette([]colorful.Color{colorful.Hsl(330.0, 0.5, 0.7)}))
@@ -48,6 +48,16 @@ func DrawHexagon(c PatternContext) {
 	dc.Fill()
 	dc.DrawRegularPolygon(6, s/2, s/2, s/2, 30.0*2*math.Pi/360.0)
 	dc.Stroke()
+}
+
+// here c.size is the size of the rectangle, not the tile
+func DrawHexagon2(c PatternContext) {
+	size, dc, palette := c.size, c.dc, c.p
+	DrawRect(c.withPalette([]colorful.Color{colorful.Hsl(330.0, 0.5, 0.7)}))
+	r := size.wi / 3.0
+	dc.SetColor(randFrom(palette[1:]))
+	dc.DrawRegularPolygon(6, 0, 0, r, 0)
+	dc.Fill()
 }
 
 // Single tile painter: draws concentric circles

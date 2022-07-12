@@ -62,7 +62,7 @@ func TestWithLines(t *testing.T) {
 	for _, d := range data {
 		ifs, inp := InputFlagSet()
 		ifs.Parse(strings.Split(d.s, "|"))
-		inp.Clamp()
+		inp.clamp()
 		got := new(InpData).From(inp)
 		if !(got == d.i) {
 			t.Errorf("Got, expected:\n%+v\n%+v", got, d.i)
@@ -87,7 +87,7 @@ func TestDefaults(t *testing.T) {
 	for _, d := range data {
 		ifs, inp := InputFlagSet()
 		ifs.Parse([]string{d.opt, Stringer(d.optval).String()})
-		inp.Clamp()
+		inp.clamp()
 		if d.fn(inp) != d.expected {
 			t.Errorf("Expected %v to be %v, got %s", d.opt, d.expected, d.fn(inp))
 		}
