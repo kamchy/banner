@@ -141,7 +141,7 @@ func (i Input) From(id InpData) Input {
 }
 
 // Parses commandline parameters and gives
-// Input object with fields initalized with provided values (or defaults)
+// Input object with fields initialized with provided values (or defaults)
 // TODO - sanitize input
 func GetInput() Input {
 	fs, inp := InputFlagSet()
